@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+ 
+{% block head %}
+<link href="/static/styles.css" rel="stylesheet">
+{% endblock %}
+
+{% block title %} 
+search results:
+{% endblock %}
+
+{% block main %} 
+<div class="my-auto padding-container black half-width">
+    {% if not results %} 
+        No matched results were found.<br>
+    {% else %}
+        <table class="table text-white">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Rating</th>
+                    <th>Price</th>
+                    <th>Categories</th>
+                    <th>Address</th>
+                    <th>Add to Wishlist</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for result in results %}
+                <tr>
+                    <td>{{ result["name"] }}</td>
+                    <td>{{ result["rating"] }}</td>
+                    <td>{{ result["price"] }}</td>
+                    <td>{{ result["categories"] }}</td>
+                    <td>{{ result["location"] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+    <a href="{{url_for('search')}}" class="btn btn-outline-info btn-sm mt-2" role="button">← back to search</a>
+</div>
+{% endblock %}
+
+

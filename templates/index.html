@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block title %} 
+food explorer
+{% endblock %}
+
+{% block main %} 
+<div class="inner cover">
+    <h1 class="cover-heading">welcome</h1>
+    <p class="lead">
+        search for nearby restaurants, add to your wishlist, like your favorites, and add personal reviews to fuel your 
+        foodie adventures. off you go, exploring!   
+    </p>
+    <p class="lead">
+      <a href="{{url_for('search')}}" class="btn btn-lg btn-default">search</a>
+    </p>
+  </div>
+{% endblock %}
