@@ -15,6 +15,7 @@ app.secret_key = os.getenv("SECRET_KEY")
 
 client = pymongo.MongoClient(f"mongodb+srv://{DB_USERNAME}:{DB_PASSWORD}@travel-app.kfdzca6.mongodb.net/?retryWrites=true&w=majority")
 db = client.get_database('users')
+users = db.authentication
 
 @app.route('/')
 def index(): 
@@ -25,7 +26,6 @@ def index():
 @app.route('/login', methods=["GET", "POST"])
 def login():
     if request.method == "POST":
-        users = db.authentication
         login_user = users.find_one({'name' : request.form['username']})
         if login_user:
             if bcrypt.hashpw(request.form['password'].encode("utf-8"), login_user['password']) == login_user["password"]:
@@ -40,7 +40,6 @@ def login():
 @app.route('/register', methods=["GET", "POST"])
 def register():
     if request.method == "POST":
-        users = db.authentication
         existing_user = users.find_one({'name': request.form['username']})
 
         if existing_user is None:
@@ -54,8 +53,13 @@ def register():
 @login_required
 def wishlist():
     if request.method == "POST":
-        return
-    return render_template('/wishlist.html')
+        added = request.form['added']
+        added = added.split(", ")
+        keys = ["name", "rating", "price", "category", "website", "image"]
+        new_item = dict(zip(keys, added))
+        users.find_one_and_update({'name': session['username']}, {'$addToSet': {'wishlist': new_item}})
+    wishlist_array = users.find_one({'name' : session['username']})['wishlist']
+    return render_template('/wishlist.html', wishlist_array=wishlist_array)
 
 @app.route('/favorites', methods=["GET", "POST"])
 @login_required

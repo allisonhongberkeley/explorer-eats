@@ -21,7 +21,7 @@ def find(location, categories, price_range):
 
     #Contact API endpoint. 
     try: 
-        response = yelp_api.search_query(term="restaurants", location=location, categories=categories, price=price_range, sort_by='best_match', limit=4)
+        response = yelp_api.search_query(term="restaurants", location=location, categories=categories, price=price_range, sort_by='best_match', limit=6)
     except requests.RequestException:
         return None
     
@@ -31,6 +31,7 @@ def find(location, categories, price_range):
         parsed = []
         for result in results:
             business = {}
+            business["id"] = result["id"]
             business["name"] = result["name"]
             business["rating"] = result["rating"]
             business["categories"] = result["categories"][0]["title"]
@@ -43,4 +44,17 @@ def find(location, categories, price_range):
         return parsed 
     except:
         return None
+    
+#instead of calling this function, can you submit all the necessary info (name, categories) via html form? 
+#do this via comma-separated string
+def find_by_id(id):
+
+    try: 
+        response = yelp_api.business_query(id=id)
+        #response returns a dictionary
+        #need name, categories, rating, price, image, website
+    except Exception: 
+        return None
+    
+    return
     

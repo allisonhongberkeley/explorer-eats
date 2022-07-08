@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block head %}
+<link href="/static/styles.css" rel="stylesheet">
+{% endblock %}
+
+{% block title %} 
+my wishlist
+{% endblock %}
+
+{% block main %}
+
+    <table class="table text-white">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Rating</th>
+                <th>Price</th>
+                <th>Categories</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in wishlist_array %}
+                {% set name = item["name"] %}
+                {% set category = item["category"] %}
+                {% set rating = item["rating"] %}
+                {% set price = item["price"] %}
+            <tr>
+                <td>{{ name }}</td>
+                <td>{{ rating }}</td>
+                <td>{{ price }}</td>
+                <td>{{ category }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

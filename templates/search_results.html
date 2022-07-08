@@ -9,7 +9,7 @@ search results:
 {% endblock %}
 
 {% block main %} 
-<div class="my-auto padding-container black half-width">
+<div class="my-auto padding-container black">
     {% if not results %} 
         No matched results were found.<br>
     {% else %}
@@ -26,12 +26,22 @@ search results:
             </thead>
             <tbody>
                 {% for result in results %}
+                    {% set name = result["name"] %}
+                    {% set categories = result["categories"] %}
+                    {% set rating = result["rating"] %}
+                    {% set price = result["price"] %}
+                    {% set website = result["website"] %}
+                    {% set image = result["image"] %}
                 <tr>
-                    <td>{{ result["name"] }}</td>
-                    <td>{{ result["rating"] }}</td>
-                    <td>{{ result["price"] }}</td>
-                    <td>{{ result["categories"] }}</td>
+                    <td>{{ name }}</td>
+                    <td>{{ rating }}</td>
+                    <td>{{ price }}</td>
+                    <td>{{ categories }}</td>
                     <td>{{ result["location"] }}</td>
+                    <form class="p-4" action="/wishlist" method="post">
+                        <td width="10%"><button name="added" value="{{name}}, {{rating}}, {{price}}, {{categories}}, {{website}}, {{image}}" 
+                            class="small-btn">+</button></td>
+                    </form>
                 </tr>
                 {% endfor %}
             </tbody>

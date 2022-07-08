@@ -74,3 +74,8 @@
     left: 50%;
     bottom: 50%
   }
+
+.cardsize {
+    height: 15rem; 
+    width: 15rem; 
+}

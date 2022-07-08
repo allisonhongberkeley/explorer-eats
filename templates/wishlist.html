@@ -11,18 +11,21 @@ my wishlist
 {% block main %}
     <div class="black padding-container">
 
-        <div class="grey card" style="width: 18rem;">
-            <img src="https://img.cdn4dd.com/cdn-cgi/image/fit=cover,width=600,height=400,format=auto,quality=80/https://doordash-static.s3.amazonaws.com/media/store/header/5c188450-cc0d-48c4-ab5f-44caf846fb95.jpg" class="card-img-top" alt="...">
-            <div class="card-body">
-            <h5 class="card-title underline">lulu's taqueria</h5>
-            <p class="card-text">
-                Categories: <br>
-                Rating: <br>
-                Price: 
-            </p>
-            <a href="https://www.lulusmexicanfood.com/" class="btn btn-light">website</a>
+        {% for item in wishlist_array %}
+            {% set image_url = item["image"] %}
+            <div class="grey card cardsize" style="width: 15rem">
+                <img src="{{image_url}}" class="card-img-top fixed-img" alt="...">
+                <div class="card-body">
+                <h5 class="card-title underline">{{item['name']}}</h5>
+                <p class="card-text">
+                    Category: {{item['category']}}<br>
+                    Rating: {{item['rating']}}<br>
+                    Price: {{item['price']}}
+                </p>
+                <a href="/" class="btn btn-light">website</a>
+                </div>
             </div>
-        </div>
+        {% endfor %}
     </div>
 
 {% endblock %}
