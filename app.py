@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from flask import Flask, redirect, render_template, request, session, url_for, flash
+from flask import Flask, redirect, render_template, request, session, url_for, flash, get_flashed_messages
 import pymongo
 import bcrypt 
 from helper import login_required, find
@@ -21,34 +21,35 @@ users = db.authentication
 def index(): 
     if 'username' in session:
         return render_template("index.html", message=session["username"])
-    return render_template("/login.html")
+    return redirect("/login")
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
+    flashed_msg = ''
     if request.method == "POST":
         login_user = users.find_one({'name' : request.form['username']})
         if login_user:
             if bcrypt.hashpw(request.form['password'].encode("utf-8"), login_user['password']) == login_user["password"]:
                 session["username"] = request.form["username"]
-                return render_template("index.html", message=session["username"])
-            return 'Invalid password'
+                return redirect('/')
+            flash('Invalid password. Please try again.')
         else:
-            return 'Invalid username'
-
-    return render_template("/login.html")
+            flash('Invalid username. Please try again.')
+        flashed_msg = get_flashed_messages()[0]
+    return render_template("/login.html", flashed_msg=flashed_msg)
 
 @app.route('/register', methods=["GET", "POST"])
 def register():
+    flashed_msg = ''
     if request.method == "POST":
         existing_user = users.find_one({'name': request.form['username']})
-
         if existing_user is None:
             hashed = bcrypt.hashpw(request.form["password"].encode("utf-8"), bcrypt.gensalt())
             users.insert_one({'name': request.form["username"], 'password': hashed, 'wishlist': [], 'favorites': []})
             return redirect(url_for('login'))
-        flash('A user exists with that email address.')
-        #return 'Username is already is database'
-    return render_template("/register.html")
+        flash('A user already exists with that username.', 'error')
+        flashed_msg = get_flashed_messages()[0]
+    return render_template("/register.html", flashed_msg=flashed_msg)
 
 def parse_req(input):
     input = input.split("✘ ")
@@ -110,7 +111,6 @@ def remove_fav():
     return redirect('/favorite')
 
 @app.route('/favorite', methods=["GET", "POST"])
-#keep track of fav length
 @login_required
 def favorite():
     favorites_array = users.find_one({'name' : session['username']})['favorites']

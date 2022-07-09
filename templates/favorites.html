@@ -44,5 +44,8 @@ favorites
             {% endfor %}
         </tbody>
     </table>
+    {% if favorites|length >= 8 %}
+    You have reached your limit of 8 ❤️ items. Please remove merchants to add new ones. 
+    {% endif %}
 </div>
 {% endblock %}
