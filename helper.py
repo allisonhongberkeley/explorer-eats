@@ -45,16 +45,4 @@ def find(location, categories, price_range):
     except:
         return None
     
-#instead of calling this function, can you submit all the necessary info (name, categories) via html form? 
-#do this via comma-separated string
-def find_by_id(id):
-
-    try: 
-        response = yelp_api.business_query(id=id)
-        #response returns a dictionary
-        #need name, categories, rating, price, image, website
-    except Exception: 
-        return None
-    
-    return
     
