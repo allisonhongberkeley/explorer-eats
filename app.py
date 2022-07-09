@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from flask import Flask, redirect, render_template, request, session, url_for
+from flask import Flask, redirect, render_template, request, session, url_for, flash
 import pymongo
 import bcrypt 
 from helper import login_required, find
@@ -46,16 +46,27 @@ def register():
             hashed = bcrypt.hashpw(request.form["password"].encode("utf-8"), bcrypt.gensalt())
             users.insert_one({'name': request.form["username"], 'password': hashed, 'wishlist': [], 'favorites': []})
             return redirect(url_for('login'))
-        return 'Username is already is database'
+        flash('A user exists with that email address.')
+        #return 'Username is already is database'
     return render_template("/register.html")
+
+def parse_req(input):
+    input = input.split("✘ ")
+    keys = ["name", "rating", "price", "category", "website", "image", "address"]
+    new_item = dict(zip(keys, input))
+    return new_item
+
+def act(item, add_to, action):
+    new_item = parse_req(item)
+    users.find_one_and_update({'name': session['username']}, {action: {add_to: new_item}})
+    return new_item 
 
 @app.route('/wishlist', methods=["GET", "POST"])
 @login_required
 def wishlist():
     if request.method == "POST":
         added = request.form['added']
-        new_item = parse_req(added)
-        users.find_one_and_update({'name': session['username']}, {'$addToSet': {'wishlist': new_item}})
+        act(added, 'wishlist', '$addToSet')
     wishlist_array = users.find_one({'name' : session['username']})['wishlist']
     return render_template('/wishlist.html', wishlist_array=wishlist_array)
 
@@ -70,6 +81,8 @@ def search():
         categories = "✘ ".join(categories).replace(" ", "").lower()
         category_file = open("restaurant-categories.json")
         category_file = json.load(category_file)
+        aliases =[]
+        titles = []
         #for category in categories:
             #find_alias = data[]
         price = request.form.get("price") 
@@ -82,11 +95,10 @@ def search():
 
 @app.route('/remove_wish', methods=["GET", "POST"])
 @login_required
-def remove():
+def remove_wishlist():
     if request.method == "POST": 
         removed = request.form['removed']
-        new_item = parse_req(removed)
-        users.find_one_and_update({'name': session['username']}, {'$pull': {'wishlist': new_item}})
+        act(removed, 'wishlist', '$pull')
     return redirect('/wishlist')
 
 @app.route('/remove_fav', methods=["GET", "POST"])
@@ -94,25 +106,22 @@ def remove():
 def remove_fav():
     if request.method == "POST": 
         removed = request.form['removed']
-        new_item = parse_req(removed)
-        users.find_one_and_update({'name': session['username']}, {'$pull': {'favorites': new_item}})
+        act(removed, 'favorites', '$pull')
     return redirect('/favorite')
 
 @app.route('/favorite', methods=["GET", "POST"])
+#keep track of fav length
 @login_required
 def favorite():
-    if request.method == "POST":
-        liked = request.form['liked']
-        new_item = parse_req(liked)
-        users.find_one_and_update({'name': session['username']}, {'$addToSet': {'favorites': new_item}})
     favorites_array = users.find_one({'name' : session['username']})['favorites']
+    if request.method == "POST":
+        fav_count = len(favorites_array)
+        if fav_count < 8: 
+            liked = request.form['liked']
+            new_item = act(liked, 'favorites', '$addToSet')
+            fav_count += 1
+            favorites_array.append(new_item)
     return render_template('/favorites.html', favorites=favorites_array)
-
-def parse_req(input):
-    input = input.split("✘ ")
-    keys = ["name", "rating", "price", "category", "website", "image", "address"]
-    new_item = dict(zip(keys, input))
-    return new_item
 
 @app.route('/logout')
 def logout():
