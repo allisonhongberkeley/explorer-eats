@@ -18,16 +18,30 @@ favorites
                 <th>Price</th>
                 <th>Categories</th>
                 <th>Address</th>
+                <th>Remove</th>
             </tr>
         </thead>
         <tbody>
+            {% for fav in favorites %}
+                {% set name = fav["name"] %}
+                {% set category = fav["category"] %}
+                {% set rating = fav["rating"] %}
+                {% set price = fav["price"] %}
+                {% set address = fav["address"] %}
+                {% set image_url = fav["image"] %}
+                {% set website = fav["website"] %}
             <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>{{ name }}</td>
+                <td>{{ rating }}</td>
+                <td>{{ price }}</td>
+                <td>{{ category }}</td>
+                <td>{{ address }}</td>
+                <form class="p-4" action="/remove_fav" method="post">
+                    <td width="10%"><button name="removed" value="{{name}}✘ {{rating}}✘ {{price}}✘ {{category}}✘ {{website}}✘ {{image_url}}✘ {{address}}" 
+                        class="small-btn">-</button></td>
+                </form>
             </tr>
+            {% endfor %}
         </tbody>
     </table>
 </div>

@@ -9,30 +9,26 @@ my wishlist
 {% endblock %}
 
 {% block main %}
+    <div class="black padding-container">
 
-    <table class="table text-white">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Rating</th>
-                <th>Price</th>
-                <th>Categories</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for item in wishlist_array %}
-                {% set name = item["name"] %}
-                {% set category = item["category"] %}
-                {% set rating = item["rating"] %}
-                {% set price = item["price"] %}
-            <tr>
-                <td>{{ name }}</td>
-                <td>{{ rating }}</td>
-                <td>{{ price }}</td>
-                <td>{{ category }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        {% for item in wishlist_array %}
+            {% set image_url = item["image"] %}
+            {% set website = item['website'] %}
+            <div class="card-height grey card" style="width: 12rem;">
+                <img src="{{image_url}}" class="img-size card-img-top" alt="...">
+                <div class="card-body">
+                <h5 class=" fs-6 card-title underline">
+                    <a href="{{website}}">{{item['name']}}</a>
+                </h5>
+                
+                <p class="card-text">
+                    {{item['category']}}<br>
+                    Rating: {{item['rating']}}<br>
+                    Price: {{item['price']}}
+                </p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 
 {% endblock %}

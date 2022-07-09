@@ -75,7 +75,12 @@
     bottom: 50%
   }
 
-.cardsize {
-    height: 15rem; 
-    width: 15rem; 
-}
+  .img-size {
+      height: 6rem; 
+      object-fit: cover; 
+  }
+
+  .card-size {
+      height: 8rem; 
+      width: 15rem; 
+  }

@@ -32,6 +32,7 @@ search results:
                     {% set price = result["price"] %}
                     {% set website = result["website"] %}
                     {% set image = result["image"] %}
+                    {% set address = result["location"] %}
                 <tr>
                     <td>{{ name }}</td>
                     <td>{{ rating }}</td>
@@ -39,7 +40,7 @@ search results:
                     <td>{{ categories }}</td>
                     <td>{{ result["location"] }}</td>
                     <form class="p-4" action="/wishlist" method="post">
-                        <td width="10%"><button name="added" value="{{name}}, {{rating}}, {{price}}, {{categories}}, {{website}}, {{image}}" 
+                        <td width="10%"><button name="added" value="{{name}}✘ {{rating}}✘ {{price}}✘ {{categories}}✘ {{website}}✘ {{image}}✘ {{address}}" 
                             class="small-btn">+</button></td>
                     </form>
                 </tr>

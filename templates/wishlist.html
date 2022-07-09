@@ -9,23 +9,51 @@ my wishlist
 {% endblock %}
 
 {% block main %}
-    <div class="black padding-container">
-
-        {% for item in wishlist_array %}
-            {% set image_url = item["image"] %}
-            <div class="grey card cardsize" style="width: 15rem">
-                <img src="{{image_url}}" class="card-img-top fixed-img" alt="...">
-                <div class="card-body">
-                <h5 class="card-title underline">{{item['name']}}</h5>
-                <p class="card-text">
-                    Category: {{item['category']}}<br>
-                    Rating: {{item['rating']}}<br>
-                    Price: {{item['price']}}
-                </p>
-                <a href="/" class="btn btn-light">website</a>
-                </div>
-            </div>
-        {% endfor %}
-    </div>
+<div class="padding-container black">
+    <table class="table text-white">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Rating</th>
+                <th>Price</th>
+                <th>Categories</th>
+                <th>Remove</th>
+                <th>Add to Favorites ❤️</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in wishlist_array %}
+                {% set name = item["name"] %}
+                {% set category = item["category"] %}
+                {% set rating = item["rating"] %}
+                {% set price = item["price"] %}
+                {% set image_url = item["image"] %}
+                {% set website = item["website"] %}
+                {% set address = item["address"] %}
+            <tr>
+                <td class="d-flex justify-content-center">
+                    <div class="card-size grey card" style="width: 15rem;">
+                        <img src="{{image_url}}" class="img-size card-img-top" alt="...">
+                        <p class="card-text">
+                            <a href="{{website}}">{{name}}</a>
+                        </p>
+                    </div>
+                </td>
+                <td>{{ rating }}</td>
+                <td>{{ price }}</td>
+                <td>{{ category }}</td>
+                <form class="p-4" action="/remove_wish" method="post">
+                    <td width="10%"><button name="removed" value="{{name}}✘ {{rating}}✘ {{price}}✘ {{category}}✘ {{website}}✘ {{image_url}}✘ {{address}}" 
+                        class="small-btn">-</button></td>
+                </form>
+                <form class="p-4" action="/favorite" method="post">
+                    <td width="10%"><button name="liked" value="{{name}}✘ {{rating}}✘ {{price}}✘ {{category}}✘ {{website}}✘ {{image_url}}✘ {{address}}" 
+                        class="small-btn">❤️</button></td>
+                </form>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 
 {% endblock %}

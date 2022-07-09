@@ -54,19 +54,10 @@ def register():
 def wishlist():
     if request.method == "POST":
         added = request.form['added']
-        added = added.split(", ")
-        keys = ["name", "rating", "price", "category", "website", "image"]
-        new_item = dict(zip(keys, added))
+        new_item = parse_req(added)
         users.find_one_and_update({'name': session['username']}, {'$addToSet': {'wishlist': new_item}})
     wishlist_array = users.find_one({'name' : session['username']})['wishlist']
     return render_template('/wishlist.html', wishlist_array=wishlist_array)
-
-@app.route('/favorites', methods=["GET", "POST"])
-@login_required
-def favorites():
-    if request.method == "POST":
-        return 
-    return render_template('/favorites.html')
 
 @app.route('/search', methods=["GET", "POST"])
 @login_required
@@ -75,8 +66,8 @@ def search():
     if request.method == "POST":
         location = request.form.get("location")
         categories = request.form.get("categories")
-        categories = categories.split(", ")
-        categories = ", ".join(categories).replace(" ", "").lower()
+        categories = categories.split("✘ ")
+        categories = "✘ ".join(categories).replace(" ", "").lower()
         category_file = open("restaurant-categories.json")
         category_file = json.load(category_file)
         #for category in categories:
@@ -88,6 +79,40 @@ def search():
         results = find(location, categories, price_range)
         return render_template("/search_results.html", location=location, categories=categories, results=results)
     return render_template('/search.html')
+
+@app.route('/remove_wish', methods=["GET", "POST"])
+@login_required
+def remove():
+    if request.method == "POST": 
+        removed = request.form['removed']
+        new_item = parse_req(removed)
+        users.find_one_and_update({'name': session['username']}, {'$pull': {'wishlist': new_item}})
+    return redirect('/wishlist')
+
+@app.route('/remove_fav', methods=["GET", "POST"])
+@login_required
+def remove_fav():
+    if request.method == "POST": 
+        removed = request.form['removed']
+        new_item = parse_req(removed)
+        users.find_one_and_update({'name': session['username']}, {'$pull': {'favorites': new_item}})
+    return redirect('/favorite')
+
+@app.route('/favorite', methods=["GET", "POST"])
+@login_required
+def favorite():
+    if request.method == "POST":
+        liked = request.form['liked']
+        new_item = parse_req(liked)
+        users.find_one_and_update({'name': session['username']}, {'$addToSet': {'favorites': new_item}})
+    favorites_array = users.find_one({'name' : session['username']})['favorites']
+    return render_template('/favorites.html', favorites=favorites_array)
+
+def parse_req(input):
+    input = input.split("✘ ")
+    keys = ["name", "rating", "price", "category", "website", "image", "address"]
+    new_item = dict(zip(keys, input))
+    return new_item
 
 @app.route('/logout')
 def logout():
