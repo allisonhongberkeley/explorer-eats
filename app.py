@@ -17,6 +17,15 @@ client = pymongo.MongoClient(f"mongodb+srv://{DB_USERNAME}:{DB_PASSWORD}@travel-
 db = client.get_database('users')
 users = db.authentication
 
+#Create category dictionary, mapping its aliases to titles. 
+category_file = open("restaurant-categories.json")
+categories = json.load(category_file)
+category_dict = {}
+for category in categories:
+    title = category.get('title')
+    alias = category.get('alias')
+    category_dict[title] = alias    
+
 @app.route('/')
 def index(): 
     if 'username' in session:
@@ -80,12 +89,6 @@ def search():
         categories = request.form.get("categories")
         categories = categories.split("✘ ")
         categories = "✘ ".join(categories).replace(" ", "").lower()
-        category_file = open("restaurant-categories.json")
-        category_file = json.load(category_file)
-        aliases =[]
-        titles = []
-        #for category in categories:
-            #find_alias = data[]
         price = request.form.get("price") 
         p_range = range(1, int(price) + 1)
         p_range = [str(i) for i in p_range]
