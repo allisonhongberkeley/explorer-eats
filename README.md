@@ -1,4 +1,4 @@
-###Food Explorer
+### Food Explorer
 
 #### About The Project:
 In this project, I built a web application that allows users to explore new restaurants nearby and in locations of interest. The search functionality that I implemented specifically enables searching for restaurants based on location, cuisine type, and price and returns best-match results to the user.  
