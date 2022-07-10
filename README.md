@@ -11,7 +11,7 @@ The registration/login processes were built using bcrypt and MongoDB. When a use
 _________________
 
 #### API Integration: 
-The app pulls data from the Yelp Fusion API to return top results to the user. The search page takes in location, cuisine category, and a price range as HTML form inputs, and the inputs are parsed and re-formatted to match the query parameters specified by the Yelp Developers documentation. Finally, the app contacts the API endpoint to retrieve merchants that match the given specifications, and returns the information to the user on the frontend. 
+The app pulls data from the Yelp Fusion API to return top results to the user. The search page takes in location, cuisine category, and a price range as HTML form inputs, and the inputs are parsed and re-formatted to match the query parameters specified by the [Yelp Developers documentation](https://www.yelp.com/developers/documentation/v3/business_search). Finally, the app contacts the API endpoint to retrieve merchants that match the given specifications, and returns the information to the user on the frontend. 
 _________________
 
 #### User Interface: 
