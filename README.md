@@ -17,5 +17,12 @@ _________________
 #### User Interface: 
 The UI is simple, clear, and aesthetic. Since the main functionality of the app is for users to find, save, and like restaurants, it is designed to be informative and easy to navigate. Attached below are example photos of the UI.
 
-[![Home page](/ui/home.png "Shiprock, New Mexico by Beau Rogers")]
+[![Home page](/ui/home.png )]
+[!Search(/ui/search1.png )]
+[![Search](/ui/search2.png )]
+[![Home page](/ui/searchresults.png )]
+[![Home page](/ui/wishlist.png )]
+[![Home page](/ui/favorites.png )]
+
+
 
