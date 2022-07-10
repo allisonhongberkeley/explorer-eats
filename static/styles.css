@@ -84,3 +84,9 @@
       height: 8rem; 
       width: 15rem; 
   }
+
+  .scrollable-menu {
+    height: auto;
+    max-height: 200px;
+    overflow-x: hidden;
+}

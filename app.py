@@ -87,15 +87,14 @@ def search():
     if request.method == "POST":
         location = request.form.get("location")
         categories = request.form.get("categories")
-        categories = categories.split("✘ ")
-        categories = "✘ ".join(categories).replace(" ", "").lower()
+        categories = category_dict[categories]
         price = request.form.get("price") 
         p_range = range(1, int(price) + 1)
         p_range = [str(i) for i in p_range]
         price_range = ", ".join(p_range)
         results = find(location, categories, price_range)
         return render_template("/search_results.html", location=location, categories=categories, results=results)
-    return render_template('/search.html')
+    return render_template('/search.html', categories=category_dict.keys())
 
 @app.route('/remove_wish', methods=["GET", "POST"])
 @login_required
