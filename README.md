@@ -22,7 +22,7 @@ The UI is simple, clear, and aesthetic. Since the main functionality of the app 
 [![Search](/ui/search2.png )]
 [![Home page](/ui/searchresults.png )]
 [![Home page](/ui/wishlist.png )]
-[![Home page](/ui/favorites.png )]
+
 
 
 
