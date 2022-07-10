@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 from flask import Flask, redirect, render_template, request, session, url_for, flash, get_flashed_messages
 import pymongo
 import bcrypt 
-from helper import login_required, find
+from routes import login_required, find
 import json 
 
 load_dotenv() 
@@ -74,10 +74,11 @@ def act(item, add_to, action):
 @app.route('/wishlist', methods=["GET", "POST"])
 @login_required
 def wishlist():
-    if request.method == "POST":
-        added = request.form['added']
-        act(added, 'wishlist', '$addToSet')
     wishlist_array = users.find_one({'name' : session['username']})['wishlist']
+    if request.method == "POST" and len(wishlist_array) < 4:
+        added = request.form['added']
+        item = act(added, 'wishlist', '$addToSet')
+        wishlist_array.append(item)
     return render_template('/wishlist.html', wishlist_array=wishlist_array)
 
 @app.route('/search', methods=["GET", "POST"])
@@ -116,13 +117,12 @@ def remove_fav():
 @login_required
 def favorite():
     favorites_array = users.find_one({'name' : session['username']})['favorites']
-    if request.method == "POST":
-        fav_count = len(favorites_array)
-        if fav_count < 8: 
-            liked = request.form['liked']
-            new_item = act(liked, 'favorites', '$addToSet')
-            fav_count += 1
-            favorites_array.append(new_item)
+    fav_count = len(favorites_array)
+    if request.method == "POST" and fav_count < 8:
+        liked = request.form['liked']
+        new_item = act(liked, 'favorites', '$addToSet')
+        fav_count += 1
+        favorites_array.append(new_item)
     return render_template('/favorites.html', favorites=favorites_array)
 
 @app.route('/logout')

@@ -54,6 +54,9 @@ my wishlist
             {% endfor %}
         </tbody>
     </table>
+    {% if wishlist_array|length >= 4 %}
+    You have reached the 4-item limit. To add new items, please delete old ones.  
+    {% endif %}
 </div>
 
 {% endblock %}
