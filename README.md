@@ -1,4 +1,4 @@
-### Food Explorer
+### Explorer Eats
 
 [Video Description](https://www.youtube.com/watch?v=XXFdgKklZqY)
 
